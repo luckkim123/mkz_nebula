@@ -73,8 +73,9 @@ void HesaiDriverRosWrapper::ReceiveScanMsgCallback(
     nebula_points_pub_->get_intra_process_subscription_count() > 0) {
     auto ros_pc_msg_ptr = std::make_unique<sensor_msgs::msg::PointCloud2>();
     pcl::toROSMsg(*pointcloud, *ros_pc_msg_ptr);
-    ros_pc_msg_ptr->header.stamp =
-      rclcpp::Time(SecondsToChronoNanoSeconds(std::get<1>(pointcloud_ts)).count());
+    // ros_pc_msg_ptr->header.stamp =
+    //   rclcpp::Time(SecondsToChronoNanoSeconds(std::get<1>(pointcloud_ts)).count());
+    ros_pc_msg_ptr->header.stamp = scan_msg->header.stamp;
     PublishCloud(std::move(ros_pc_msg_ptr), nebula_points_pub_);
   }
   if (
@@ -84,8 +85,9 @@ void HesaiDriverRosWrapper::ReceiveScanMsgCallback(
       nebula::drivers::convertPointXYZIRCAEDTToPointXYZIR(pointcloud);
     auto ros_pc_msg_ptr = std::make_unique<sensor_msgs::msg::PointCloud2>();
     pcl::toROSMsg(*autoware_cloud_xyzi, *ros_pc_msg_ptr);
-    ros_pc_msg_ptr->header.stamp =
-      rclcpp::Time(SecondsToChronoNanoSeconds(std::get<1>(pointcloud_ts)).count());
+    // ros_pc_msg_ptr->header.stamp =
+    //   rclcpp::Time(SecondsToChronoNanoSeconds(std::get<1>(pointcloud_ts)).count());
+    ros_pc_msg_ptr->header.stamp = scan_msg->header.stamp;
     PublishCloud(std::move(ros_pc_msg_ptr), aw_points_base_pub_);
   }
   if (
@@ -95,8 +97,9 @@ void HesaiDriverRosWrapper::ReceiveScanMsgCallback(
       nebula::drivers::convertPointXYZIRCAEDTToPointXYZIRADT(pointcloud, std::get<1>(pointcloud_ts));
     auto ros_pc_msg_ptr = std::make_unique<sensor_msgs::msg::PointCloud2>();
     pcl::toROSMsg(*autoware_ex_cloud, *ros_pc_msg_ptr);
-    ros_pc_msg_ptr->header.stamp =
-      rclcpp::Time(SecondsToChronoNanoSeconds(std::get<1>(pointcloud_ts)).count());
+    // ros_pc_msg_ptr->header.stamp =
+    //   rclcpp::Time(SecondsToChronoNanoSeconds(std::get<1>(pointcloud_ts)).count());
+    ros_pc_msg_ptr->header.stamp = scan_msg->header.stamp;
     PublishCloud(std::move(ros_pc_msg_ptr), aw_points_ex_pub_);
   }
 
